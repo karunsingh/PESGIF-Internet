@@ -1,0 +1,79 @@
+<html>
+<head>
+	<title>PESGIF Readings</title>
+</head>
+<body>
+	<table border = "1" cellpadding = "3" cellspacing = "0" style = "text-align:center;">
+	<tr bgcolor = "#EEEEEE"><th>Device ID</th><th>Date/Time</th><th>Crop</th><th>Sensor</th><th>Reading</th><th>Percentage</th><th>City</th><th>Region</th><th>Latitude</th><th>Longitude</th><th>Zip Code</th></tr>
+	<?
+		//Connect to the MySQL Database
+		$con = mysqli_connect("mysql9.000webhost.com","a7984291_un","pesgif118","a7984291_DB");
+		if (mysqli_connect_errno($con))
+		{
+			echo "Failed to connect to MySQL: " . mysqli_connect_error();
+		}
+		
+		//Get all the readings in the table, from newest to oldest
+		$query = mysqli_query($con,"SELECT * FROM Readings ORDER BY `DateTime` DESC");
+		while ($arr = mysqli_fetch_array($query)) //Get current row
+		{
+			echo '<tr>'; //Start a new row in the HTML
+			echo '<td>'.$arr['ID'].'</td>'; //Print the cells with the values from the table
+			echo '<td>'.$arr['DateTime'].'</td>';
+			$crop = "";
+			//Print the crop corresponding to the index stored in the table
+			if ($arr['Crop'] == 1)
+			{
+				$crop = "Rice";
+			}
+			if ($arr['Crop'] == 2)
+			{
+				$crop = "Wheat";
+			}
+			if ($arr['Crop'] == 3)
+			{
+				$crop = "Millets";
+			}
+			if ($arr['Crop'] == 4)
+			{
+				$crop = "Pulses";
+			}
+			if ($arr['Crop'] == 5)
+			{
+				$crop = "Sugarcane";
+			}
+			echo '<td>'.$crop.'</td>';
+			$sense = "";
+			//Print the sensor corresponding to the index stored in the table
+			if ($arr['Sensor'] == 1)
+			{
+				$sense = "Moisture";
+			}
+			if ($arr['Sensor'] == 2)
+			{
+				$sense = "Temperature";
+			}
+			if ($arr['Sensor'] == 3)
+			{
+				$sense = "Light";
+			}
+			if ($arr['Sensor'] == 4)
+			{
+				$sense = "Humidity";
+			}
+			echo '<td>'.$sense.'</td>';
+			//...and then everything else, as it is
+			echo '<td>'.$arr['Reading'].'</td>';
+			echo '<td>'.$arr['Percentage'].'</td>';
+			echo '<td>'.$arr['City'].'</td>';
+			echo '<td>'.$arr['Region'].'</td>';
+			echo '<td>'.$arr['Latitude'].'</td>';
+			echo '<td>'.$arr['Longitude'].'</td>';
+			echo '<td>'.$arr['Zip Code'].'</td>';
+			//End row
+			echo '</tr>';
+		}
+	?>
+	</table>
+</body>
+</html>
